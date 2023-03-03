@@ -1,14 +1,13 @@
-var x = 0;
-var y = 0;
-var direction = 0;
+var x;
+var y;
+var direction;
 
-function drawSnowFlake(n) {
-    var lengthFromCenter = canvas.width/4;
-
+function drawSnowFlake(n, lengthFromCenter) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
     
     x = canvas.width/2;
-    y = canvas.width/2;
+    y = canvas.height/2;
 
     y -= lengthFromCenter;
     direction = 2*Math.PI/3; //120 degrees
@@ -44,13 +43,31 @@ function drawSide(sideLength, n) {
 }
 
 window.onload = function() {
-   // const canvas = document.getElementById("canvas");
+    var orderInput = document.getElementById("orderInput");
+    var orderOutput = document.getElementById("orderOutput");
+    orderOutput.innerHTML = orderInput.value; 
+
+    var lengthInput = document.getElementById("lengthInput");
+    var lengthOutput = document.getElementById("lengthOutput");
+    lengthOutput.innerHTML = lengthInput.value; 
+
+    orderInput.oninput = function() {
+        console.log(this.value + " " + lengthInput.value);
+        drawSnowFlake(orderInput.value, lengthInput.value);
+        orderOutput.innerHTML = orderInput.value;
+    } 
+
+    lengthInput.oninput = function() {
+        console.log(orderInput.value + " " + this.value);
+        drawSnowFlake(orderInput.value, lengthInput.value);
+        lengthOutput.innerHTML = lengthInput.value;
+    } 
+
     ctx = canvas.getContext("2d"),
 
-    canvas.width = window.innerHeight * 0.95;
-    canvas.height = window.innerHeight * 0.95;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight * 0.99;
 
-    n = 4;
-
-    drawSnowFlake(n);
+    drawSnowFlake(orderInput.value, lengthInput.value);
 }
+
