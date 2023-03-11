@@ -52,13 +52,11 @@ window.onload = function() {
     lengthOutput.innerHTML = lengthInput.value; 
 
     orderInput.oninput = function() {
-        console.log(this.value + " " + lengthInput.value);
         drawSnowFlake(orderInput.value, lengthInput.value);
         orderOutput.innerHTML = orderInput.value;
     } 
 
     lengthInput.oninput = function() {
-        console.log(orderInput.value + " " + this.value);
         drawSnowFlake(orderInput.value, lengthInput.value);
         lengthOutput.innerHTML = lengthInput.value;
     } 
