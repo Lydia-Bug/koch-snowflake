@@ -31,6 +31,8 @@ function drawSnowFlake(n) {
 function drawSide(sideLength, n) {
     if(direction > 2*Math.PI){
         direction -= 2*Math.PI;
+    }else if(direction < -2*Math.PI){
+        direction += 2*Math.PI;
     }
     if(n == 1){ //base case, when n = 1 just draws straight line
         x += Math.cos(direction) * sideLength;
@@ -73,6 +75,7 @@ function checkIsLineVisible(sideLength){
                 isLineVisible = false;
             // is line is above or below screen the original line might not be visible, but triangles coming off it might be, so extra checks are needed
             }else if((newY < 0 && y < 0 ) || (newY > window.innerHeight && y > window.innerHeight )){
+                
                 if((parseInt(direction*100) == parseInt(200*Math.PI) || (direction < 0.1 && direction > -0.1))
                     && y > -sideLength/3 && y < 0){
                     //snowflake at top of screen
