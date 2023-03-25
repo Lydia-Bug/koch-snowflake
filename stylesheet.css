@@ -2,8 +2,25 @@ body{
     margin: 0;
 }
 
-#sliders{
+canvas{
+    position: absolute;
+    z-index: -1;
+}
+
+#input{
     font-family: Verdana,sans-serif;
     margin: 1em;
     position: absolute;
+}
+
+#input p{
+    display: inline-block;
+}
+
+#input input{
+    display: inline-block;
+}
+
+@media (min-width : 600px) {
+    #lengthFromCentre {display:none;}
 }
