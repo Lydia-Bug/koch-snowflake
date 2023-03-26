@@ -92,10 +92,10 @@ function checkIsLineVisible(sideLength){
 
 // check if sidelength is too big or small for auto changing of order when zooming
 function checkSideLength(sideLength, n){
-    if(sideLength > 40 && n == 2){
+    if(sideLength > 10 && n == 2){
         largeSideLength = true;
     }
-    if(sideLength < 20 && n == 2){
+    if(sideLength < 5 && n == 2){
         smallSideLength = true;
     }
 }
