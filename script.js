@@ -107,7 +107,6 @@ function getHypothesis(opp, adj){
 }
 
 window.onload = function() {
-    var increaseOrderAsZoomInput = document.getElementById("increaseOrderAsZoomInput");
     var orderInput = document.getElementById("orderInput");
 
     orderInput.oninput = function() {
@@ -146,23 +145,6 @@ window.onload = function() {
         centerY += Math.sin(mouseAngle) * (mouseDistanceFromCenter * (1 + event.deltaY/1000) - mouseDistanceFromCenter);
        
         drawSnowFlake(orderInput.value);
-
-        if(increaseOrderAsZoomInput.checked){
-            //my method for checking if length too large doesn't work when order is one, so this is needed
-            if(orderInput.value == 1){
-                largeSideLength = true;
-            }
-            if(largeSideLength){
-                largeSideLength = false;
-                orderInput.value++;
-                drawSnowFlake(orderInput.value);
-            }
-            if(smallSideLength){
-                smallSideLength = false;
-                orderInput.value--;
-                drawSnowFlake(orderInput.value);
-            }
-        }
     });
 
     window.addEventListener("resize", (event) => {
