@@ -3,10 +3,9 @@ var y;
 var centerX = window.innerWidth/2;
 var centerY = window.innerHeight/2;
 var direction;
-var lengthFromCenter = 300;
-var largeSideLength = false;
-var smallSideLength = false;
+var lengthFromCenter;
 
+// Draws snowflake on screen
 function drawSnowFlake(n) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
@@ -19,6 +18,7 @@ function drawSnowFlake(n) {
     ctx.moveTo(x, y);
  
     var sideLength = 2*Math.sin(Math.PI/3)*lengthFromCenter;
+    // draws the 3 sides of a triangle
     for(var i = 0; i < 3; i++){
         direction += 2*Math.PI/3; //120 degrees
         drawSide(sideLength, n);
@@ -28,8 +28,11 @@ function drawSnowFlake(n) {
     ctx.stroke(); 
 }
 
+// Recursive function that draws a side of the triangle
 function drawSide(sideLength, n) {
-    if(direction > 2*Math.PI){
+    // keeps the direction variable between -2*Pi and 2*Pi, 
+    // this makes it easier for checking whether the direction is to the left or right
+    if(direction > 2*Math.PI){ 
         direction -= 2*Math.PI;
     }else if(direction < -2*Math.PI){
         direction += 2*Math.PI;
@@ -38,14 +41,12 @@ function drawSide(sideLength, n) {
         x += Math.cos(direction) * sideLength;
         y -= Math.sin(direction) * sideLength;
         ctx.lineTo(x, y);
-    }else{
+    }else{ // else will draw a line with a triangle coming out of it
         var isLineVisible = checkIsLineVisible(sideLength);
 
         if(isLineVisible){
             var newSideLength = sideLength/3;
             
-            checkSideLength(newSideLength, n);
-
             drawSide(newSideLength, n-1);
             
             direction -= Math.PI/3 //60 degrees
@@ -57,47 +58,37 @@ function drawSide(sideLength, n) {
             direction -= Math.PI/3 //60 degrees
             drawSide(newSideLength, n-1);
         }else{
-            drawSide(sideLength, 1);
+            drawSide(sideLength, 1); // n is 1 so will just draw one straight line
         }
     }
 }
 
 //checks if line is one screen or if line is more then one pixel
 function checkIsLineVisible(sideLength){
-    var isLineVisible = true;
-        if(sideLength < 1){
-            isLineVisible = false;
-        }else if((x < 0 || x > window.innerWidth || y < 0 || y > window.innerHeight)){
-            var newX = x + Math.cos(direction) * sideLength;
-            var newY = y - Math.sin(direction) * sideLength;
+    if(sideLength < 1){
+        return false;
+    }else if((x < 0 || x > window.innerWidth || y < 0 || y > window.innerHeight)){
+        var newX = x + Math.cos(direction) * sideLength;
+        var newY = y - Math.sin(direction) * sideLength;
 
-            if((newX < 0 && x < 0 ) || (newX > window.innerWidth && x > window.innerWidth )){
-                isLineVisible = false;
-            // is line is above or below screen the original line might not be visible, but triangles coming off it might be, so extra checks are needed
-            }else if((newY < 0 && y < 0 ) || (newY > window.innerHeight && y > window.innerHeight )){
-                
-                if((parseInt(direction*100) == parseInt(200*Math.PI) || (direction < 0.1 && direction > -0.1))
-                    && y > -sideLength/3 && y < 0){
-                    //snowflake at top of screen
-                }else if((parseInt(direction*100) == parseInt(100*Math.PI) || parseInt(direction*100) == parseInt(-100*Math.PI))
-                        && y < window.innerHeight + sideLength/3 && y > window.innerHeight){
-                    //snowflake at bottom of screen
-                }else{
-                    isLineVisible = false;
+        if((newX < 0 && x < 0 ) || (newX > window.innerWidth && x > window.innerWidth )){
+            return false;
+        }else if((newY < 0 && y < 0 ) || (newY > window.innerHeight && y > window.innerHeight )){
+            // is line is above or below screen the original line might not be visible, but triangles coming off it might be
+            // so extra checks are needed
+                if((parseInt(direction*100) == parseInt(200*Math.PI) || (direction < 0.1 && direction > -0.1))){ // snowflake at top of screen
+                if(y > -sideLength/3 && y < 0){ // snowflake close enough to top of screen to still be visible
+                    return true;
                 }
+            }else if((parseInt(direction*100) == parseInt(100*Math.PI) || parseInt(direction*100) == parseInt(-100*Math.PI))){ // snowflake at bottom of screen
+                if(y < window.innerHeight + sideLength/3 && y > window.innerHeight){ // snowflake is close enough to bottom of screen to still be visible
+                    return true;
+                }  
             }
+            return false;
         }
-    return isLineVisible;
-}
-
-// check if sidelength is too big or small for auto changing of order when zooming
-function checkSideLength(sideLength, n){
-    if(sideLength > 10 && n == 2){
-        largeSideLength = true;
     }
-    if(sideLength < 5 && n == 2){
-        smallSideLength = true;
-    }
+    return true;
 }
 
 function getHypothesis(opp, adj){
@@ -107,16 +98,16 @@ function getHypothesis(opp, adj){
 }
 
 window.onload = function() {
-    var orderInput = document.getElementById("orderInput");
+    var orderInput = document.getElementById("orderInput"); //order input button
 
-    orderInput.oninput = function() {
+    orderInput.oninput = function() { //when orderInput is changed the snowflake will be redrawn
         drawSnowFlake(orderInput.value);
     } 
 
-    // will zoom when scrolling
+    // zoom on scroll
     document.addEventListener("wheel", (event) => { 
-        // increase or decrease length from center to make snowflake smaller or larger (or more zoomed in)
-        lengthFromCenter = parseInt(lengthFromCenter) * (1 + event.deltaY/1000);
+        // changes snowflakes size, by changing length from center
+        lengthFromCenter = parseInt(lengthFromCenter) * (1 + event.deltaY/1000); //event.deltaY is how much was scrolled
         if(lengthFromCenter < 1 ){ // can't be smaller then 1 pixel
             lengthFromCenter = 1;        
         }
@@ -140,21 +131,25 @@ window.onload = function() {
             mouseAngle = -Math.atan2(-mouseDistanceFromCenterX, -mouseDistanceFromCenterY) - Math.PI/2
         }
 
-        // translate depending on where mouse is, this will allow user to zoom in to where mouse is
+        // translate snowflake depending on where mouse is
+        // combined with the size changing, this will look like zooming in or out
         centerX -= Math.cos(mouseAngle) * (mouseDistanceFromCenter * (1 + event.deltaY/1000) - mouseDistanceFromCenter);
         centerY += Math.sin(mouseAngle) * (mouseDistanceFromCenter * (1 + event.deltaY/1000) - mouseDistanceFromCenter);
        
+        // redraw snowflake with new lengthFromCenter, and center coordinates
         drawSnowFlake(orderInput.value);
     });
 
+    // re-defines canvas size when window is resized
     window.addEventListener("resize", (event) => {
         ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        // redraws snowflake, snowflake will look the same as before, this is just nessercery after changing the canvas
         drawSnowFlake(orderInput.value);
     });
 
-    // allows user to pan around image
+    // pan by dragging image around
     var mouseDown = false;
     document.body.onmousedown = function() { 
         mouseDown = true;
@@ -173,7 +168,6 @@ window.onload = function() {
             if(previousX != null && previousY != null){
                 centerX += mX - previousX;
                 centerY += mY - previousY;
-
                 drawSnowFlake(orderInput.value);
             }
             previousX = mX;
@@ -188,6 +182,9 @@ window.onload = function() {
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    // size of snowflake depends on size on screen
+    lengthFromCenter = Math.min(window.innerHeight, window.innerWidth) / 3;
     
     drawSnowFlake(orderInput.value);
 }
