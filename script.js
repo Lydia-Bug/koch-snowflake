@@ -43,7 +43,9 @@ function drawSide(sideLength, n) {
         x += Math.cos(direction) * sideLength;
         y -= Math.sin(direction) * sideLength;
         ctx.lineTo(x, y);
-    }else{ // else will draw a line with a triangle coming out of it
+    // else will draw a line with a triangle coming out of it    
+    // Will do this by drawing 4 lines, each a third of the original length. Between each line, the direction the line is drawn in is changed
+    }else{ 
         var isLineVisible = checkIsLineVisible(sideLength);
 
         if(isLineVisible){
