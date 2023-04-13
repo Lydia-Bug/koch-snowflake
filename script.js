@@ -1,3 +1,5 @@
+// Author: Lydia Acton
+
 var x;
 var y;
 var centerX = window.innerWidth/2;

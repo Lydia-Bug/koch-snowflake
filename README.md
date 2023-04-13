@@ -11,3 +11,5 @@ It was easy to make the snowflake larger or smaller, but I was initially having 
 
 #### Optimizing 
 When I didn't have any scrolling I didn't really need any optimization because you couldn't see any detail above order ten, and it could draw that in about a second. But I had to optimize was I added scrolling, because I could now see higher orders. So if a line drawn is completely off the screen, it will just draw a line rather then doing further recursions. I had to alter this a bit for horizontal lines, because a horizontal line could be completely off the screen the screen but the triangle bit coming off it might not be, so I had to add something to check for that. I also added something so that if a line was less then one, it wouldn't compute any further recursions, because you couldn't see any more detail at the that point anyway.
+
+Author: Lydia Acton
