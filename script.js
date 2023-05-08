@@ -149,6 +149,9 @@ window.onload = function() {
         ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        centerX = window.innerWidth/2;
+        centerY = window.innerHeight/2;
+        lengthFromCenter = Math.min(window.innerHeight, window.innerWidth) / 3;
         // redraws snowflake, snowflake will look the same as before, this is just nessercery after changing the canvas
         drawSnowFlake(orderInput.value);
     });
