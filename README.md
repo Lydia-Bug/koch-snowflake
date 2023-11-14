@@ -1,3 +1,5 @@
+This project was done for COSC326 Computational Problem Solving 
+
 To run this code open index.html in a browser
 
 [Product demonstration video](https://www.youtube.com/watch?v=v5ZBeJs5bjs)
